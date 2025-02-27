@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classificazione Reclutamento</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    .table-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 20px;
+      position: relative;
+    }
+    .table-group {
+      flex: 1;
+      min-width: 320px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+    }
+    .table-group:hover {
+      transform: translateY(-5px);
+    }
+    .table-group h4 {
+      text-align: center;
+      font-weight: bold;
+      color: #005500;
+    }
+    .highlight-cell {
+      border: 2px solid red !important; 
+    }
+    .update-icon {
+      margin-left: 4px;
+      font-size: 1.2rem;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #005500;
+      font-weight: bold;
+    }
+    @media (max-width: 768px) {
+      .table-wrapper {
+        flex-direction: column;
+        align-items: center;
+      }
+      .divider {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <h1 class="text-center">Classificazione Reclutamento</h1>
+    <p class="text-center">Oggi ho avuto modo di parlare con Marco Rossi con codice AAALCU92M20H501X, un consulente finanziario con 12 anni di esperienza nel settore. Marco attualmente lavora presso Banca Alfa e si occupa principalmente di investimenti, polizze assicurative e gestione patrimoniale. Il suo territorio di riferimento è la Lombardia, con un focus particolare su Milano e provincia. Parlando del suo percorso, Marco mi ha raccontato che ha costruito un portafoglio solido di circa 25 milioni di euro, di cui ritiene trasferibili almeno 15 milioni. Inoltre, ha un rapporto di fiducia con circa 100 clienti, e stima che almeno 60 di loro sarebbero disposti a seguirlo in caso di cambiamento. Abbiamo discusso anche dei vincoli contrattuali e mi ha spiegato che attualmente ha una clausola di non concorrenza della durata di sei mesi, ma non la considera un ostacolo insormontabile. Ha espresso un certo grado di insoddisfazione per le limitate opportunità di crescita e per alcune rigidità aziendali che lo frenano nel suo sviluppo professionale. Tra le leve che potrebbero motivarlo a un cambiamento, ha citato una maggiore autonomia, un miglior pacchetto retributivo e la possibilità di sviluppare un team. Sul piano personale, Marco è sposato e ha due figli di 8 e 10 anni. Nel tempo libero ama il ciclismo e i viaggi, con una particolare passione per le uscite in montagna. In generale, Marco si è mostrato molto orientato al cliente e con ottime capacità relazionali. Ha riconosciuto che, se da un lato è molto attento ai dettagli, a volte rischia di essere troppo meticoloso. L'incontro è stato positivo, e Marco ha dimostrato interesse a valutare nuove opportunità. Gli forniremo un aggiornamento sui prossimi passi a breve.</p>
+    
+    <!-- Dati JSON per Record Nuovo e Record Precedente -->
+    <script id="classificatoreResult" type="application/json">
+      [
+         "AAALCU92M20H501X|Marco Rossi|Maschio|[null]|[null]|[null]|Consulente finanziario|Banca Alfa|Lombardia con focus su Milano e provincia|12|Clausola di non concorrenza di 6 mesi|25000000|15000000|60|Orientato al cliente; ottime capacità relazionali; molto attento ai dettagli|Maggiore autonomia; miglior pacchetto retributivo; sviluppo di un team|Sposato con due figli di 8 e 10 anni|Ciclismo; viaggi; uscite in montagna|Insoddisfatto delle opportunità di crescita attuali; a volte troppo meticoloso"
+      ]
+    </script>
+
+    <script id="cercaRecordResult" type="application/json">
+      [
+         "AAALCU92M20H501X||Maschio||||Consulente finanziario|Banca Alfa|Lombardia con focus su Milano e provincia|12|Clausola di non concorrenza di sei mesi|25000000.00|15000000.00|60|Orientato al cliente; ottime capacità relazionali; molto attento ai dettagli|Maggiore autonomia; miglior pacchetto retributivo; sviluppo di un team|Sposato con due figli di 8 e 10 anni|Ciclismo; viaggi; uscite in montagna|Si occupa di investimenti, polizze assicurative e gestione patrimoniale; talvolta troppo meticoloso"
+      ]
+    </script>
+    
+    <!-- Dati JSON per il Record Aggiornato (terza tabella) -->
+    <script id="updateResult" type="application/json">
+      [ "AAALCU92M20H501X|Marco Rossi|Maschio||||Consulente finanziario|Banca Alfa|Lombardia con focus su Milano e provincia|12|Clausola di non concorrenza di sei mesi|25000000.00|15000000.00|60|Orientato al cliente; ottime capacità relazionali; molto attento ai dettagli|Maggiore autonomia; miglior pacchetto retributivo; sviluppo di un team|Sposato con due figli di 8 e 10 anni|Ciclismo; viaggi; uscite in montagna|Si occupa di investimenti, polizze assicurative e gestione patrimoniale; talvolta troppo meticoloso" ]
+    </script>
+
+    <div class="table-wrapper">
+      <!-- Record Precedente -->
+      <div class="table-group">
+        <h4>Record Precedente</h4>
+        <table class="table table-bordered" id="previous-record">
+          <thead>
+            <tr>
+              <th>Campo</th>
+              <th>Valore</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Nuovo Record -->
+      <div class="table-group">
+        <h4>Record Nuovo</h4>
+        <table class="table table-bordered" id="new-record">
+          <thead>
+            <tr>
+              <th>Campo</th>
+              <th>Valore</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider">⇨</div>
+
+      <!-- Valori Aggiornati -->
+      <div class="table-group">
+        <h4>Record Aggiornato</h4>
+        <table class="table table-bordered" id="updated-values">
+          <thead>
+            <tr>
+              <th>Campo</th>
+              <th>Valore</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Ordine dei campi
+    const fieldKeys = [
+      "CF",
+      "Nome",
+      "Genere",
+      "Età",
+      "Mail",
+      "Cellulare",
+      "Ruolo",
+      "Società attuale",
+      "Area di competenza",
+      "Anni d'esperienza",
+      "Vincoli contrattuali",
+      "Portafoglio gestito",
+      "Portafoglio trasferibile",
+      "Base clienti trasferibile",
+      "Punti di forza",
+      "Obiettivi professionali futuri",
+      "Situazione famigliare",
+      "Hobby",
+      "Altre informazioni"
+    ];
+
+    // Etichette da visualizzare per ogni campo
+    const fieldNames = {
+      "CF": "CF",
+      "Nome": "Nome e Cognome",
+      "Genere": "Genere",
+      "Età": "Età",
+      "Mail": "Mail",
+      "Cellulare": "Cellulare",
+      "Ruolo": "Ruolo",
+      "Società attuale": "Società attuale",
+      "Area di competenza": "Area di competenza",
+      "Anni d'esperienza": "Anni d'esperienza",
+      "Vincoli contrattuali": "Vincoli contrattuali",
+      "Portafoglio gestito": "Portafoglio gestito",
+      "Portafoglio trasferibile": "Portafoglio trasferibile",
+      "Base clienti trasferibile": "Base clienti trasferibile",
+      "Punti di forza": "Punti di forza",
+      "Obiettivi professionali futuri": "Obiettivi professionali futuri",
+      "Situazione famigliare": "Situazione famigliare",
+      "Hobby": "Hobby",
+      "Altre informazioni": "Altre informazioni"
+    };
+
+    // Recupero dei dati JSON
+    let classificatoreResult, cercaRecordResult, updateResult;
+    try {
+      classificatoreResult = JSON.parse(document.getElementById('classificatoreResult').textContent);
+    } catch (e) {
+      console.error("Errore nel parsing di classificatoreResult:", e);
+      classificatoreResult = [];
+    }
+    try {
+      cercaRecordResult = JSON.parse(document.getElementById('cercaRecordResult').textContent);
+    } catch (e) {
+      console.error("Errore nel parsing di cercaRecordResult:", e);
+      cercaRecordResult = [];
+    }
+    try {
+      updateResult = JSON.parse(document.getElementById('updateResult').textContent);
+    } catch (e) {
+      console.error("Errore nel parsing di updateResult:", e);
+      updateResult = [];
+    }
+
+    // Converte la stringa CSV (separata da '|') in un oggetto usando l'ordine definito in fieldKeys
+    function processRecord(recordArray) {
+      if (recordArray.length === 0) return {};
+      let values = recordArray[0].split('|').map(value => {
+        value = value.trim();
+        if (value === '[null]' || value === 'null') return '';
+        if (value.startsWith('"') && value.endsWith('"')) {
+          value = value.substring(1, value.length - 1);
+        }
+        return value;
+      });
+      let recordObj = {};
+      fieldKeys.forEach((key, index) => {
+        recordObj[key] = values[index] || "";
+      });
+      return recordObj;
+    }
+
+    // Elaborazione dei record
+    const previousData = processRecord(cercaRecordResult);
+    const newData = processRecord(classificatoreResult);
+    const updatedData = processRecord(updateResult);
+
+    // Popola una tabella con i dati di un record (due colonne: Campo e Valore)
+    // Se compareData viene passato (per "Valori Aggiornati"), evidenzia la cella con bordo rosso e aggiunge l'icona 🔄
+    // se il valore nel Record Precedente è vuoto o "N/A" e il valore nel Record Aggiornato non è vuoto né "N/A".
+    function populateTable(tableId, record, highlightChanges = false, compareData = null) {
+      const tableBody = document.getElementById(tableId).querySelector("tbody");
+      tableBody.innerHTML = "";
+      if (!record || Object.keys(record).length === 0) {
+        tableBody.innerHTML = "<tr><td colspan='2'>Nessun dato disponibile</td></tr>";
+        return;
+      }
+      fieldKeys.forEach((key) => {
+        const row = document.createElement("tr");
+        const fieldCell = document.createElement("td");
+        fieldCell.textContent = fieldNames[key];
+        const valueCell = document.createElement("td");
+        valueCell.textContent = record[key] || "N/A";
+
+        if (highlightChanges && compareData) {
+          let prevVal = (compareData[key] || "").trim().toUpperCase();
+          let currVal = (record[key] || "").trim().toUpperCase();
+          if ((prevVal === "" || prevVal === "N/A") && (currVal !== "" && currVal !== "N/A")) {
+            // Aggiunge un bordo rosso alla cella e l'icona 🔄 accanto al valore
+            valueCell.classList.add("highlight-cell");
+            valueCell.innerHTML += ' <span class="update-icon">🔄</span>';
+          }
+        }
+
+        row.appendChild(fieldCell);
+        row.appendChild(valueCell);
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Popoliamo le tabelle:
+    populateTable("previous-record", previousData);
+    populateTable("new-record", newData);
+    populateTable("updated-values", updatedData, true, previousData);
+
+    console.log("Previous Data:", previousData);
+    console.log("New Data:", newData);
+    console.log("Updated Data:", updatedData);
+  </script>
+</body>
+</html>
