@@ -2,9 +2,9 @@
 
 Questa repository contiene l'interfaccia per il reclutamento e la gestione dei file relativi alla trascrizione di un audio. Qui verranno caricati i documenti necessari per elaborare e gestire le trascrizioni in modo efficiente.
 
-Link: https://interfaccia-reclutamento.onrender.com
+Link interfaccia schema: https://interfaccia-reclutamento.onrender.com
 
-Link: https://n8n-audio-interface.onrender.com
+Link interfaccia audio: https://n8n-audio-interface.onrender.com/
 
 ## 📂 Contenuto della Repository
 - File html-javascript dell'interfaccia per il reclutamento
