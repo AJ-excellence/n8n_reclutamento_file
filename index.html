@@ -7,44 +7,73 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
       text-align: center;
-      margin: 50px;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    h1 {
+      font-size: 28px;
+      color: #333;
+    }
+    p {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 20px;
     }
     .link-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
       margin-top: 20px;
     }
     a {
-      display: block;
-      margin: 10px;
-      padding: 10px;
+      display: inline-block;
+      padding: 15px 25px;
       background-color: #007bff;
       color: white;
       text-decoration: none;
-      width: 200px;
-      margin: auto;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all 0.3s;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     }
     a:hover {
       background-color: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #888;
     }
   </style>
   <script>
     window.onload = function() {
-      // Apre Interfaccia_reclutamento.html in una nuova scheda
       window.open("Interfaccia_reclutamento.html", "_blank");
-      // Apre l'API gTTS su Render in una nuova scheda
-      window.open("https://gtts-text-to-audio.onrender.com", "_blank");
-      // (Opzionale) Puoi reindirizzare anche la finestra corrente, ad esempio a una delle due interfacce:
-      // window.location.href = "Interfaccia_reclutamento.html";
+      window.open("https://n8n-audio-interface.onrender.com", "_blank");
     }
   </script>
 </head>
 <body>
-  <h1>Benvenuto</h1>
-  <p>Seleziona l'interfaccia che vuoi usare:</p>
-  <div class="link-container">
-    <a href="Interfaccia_reclutamento.html">Interfaccia Reclutamento</a>
-    <a href="https://gtts-text-to-audio.onrender.com">Interfaccia Audio</a>
+  <div class="container">
+    <h1>Benvenuto</h1>
+    <p>Seleziona l'interfaccia che vuoi usare:</p>
+    <div class="link-container">
+      <a href="Interfaccia_reclutamento.html" target="_blank">Interfaccia Reclutamento</a>
+      <a href="https://n8n-audio-interface.onrender.com" target="_blank">Interfaccia Audio-Text</a>
+    </div>
+    <div class="footer">&copy; 2025 - Progetto Interfacce | Tutti i diritti riservati</div>
   </div>
 </body>
 </html>
