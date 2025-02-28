@@ -1,40 +1,50 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seleziona un'interfaccia</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-        }
-        .link-container {
-            margin-top: 20px;
-        }
-        a {
-            display: block;
-            margin: 10px;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            width: 200px;
-            margin: auto;
-            border-radius: 5px;
-        }
-        a:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seleziona un'interfaccia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    .link-container {
+      margin-top: 20px;
+    }
+    a {
+      display: block;
+      margin: 10px;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      width: 200px;
+      margin: auto;
+      border-radius: 5px;
+    }
+    a:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  <script>
+    window.onload = function() {
+      // Apre Interfaccia_reclutamento.html in una nuova scheda
+      window.open("Interfaccia_reclutamento.html", "_blank");
+      // Apre l'API gTTS su Render in una nuova scheda
+      window.open("https://gtts-text-to-audio.onrender.com", "_blank");
+      // (Opzionale) Puoi reindirizzare anche la finestra corrente, ad esempio a una delle due interfacce:
+      // window.location.href = "Interfaccia_reclutamento.html";
+    }
+  </script>
 </head>
 <body>
-    <h1>Benvenuto</h1>
-    <p>Seleziona l'interfaccia che vuoi usare:</p>
-    <div class="link-container">
-        <a href="Interfaccia_reclutamento.html">Interfaccia Reclutamento</a>
-        <a href="https://n8n-audio-interface.onrender.com">Interfaccia Audio</a>
-    </div>
+  <h1>Benvenuto</h1>
+  <p>Seleziona l'interfaccia che vuoi usare:</p>
+  <div class="link-container">
+    <a href="Interfaccia_reclutamento.html">Interfaccia Reclutamento</a>
+    <a href="https://gtts-text-to-audio.onrender.com">Interfaccia Audio</a>
+  </div>
 </body>
 </html>
