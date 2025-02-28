@@ -5,7 +5,7 @@ import { useVoiceRecorder } from './hooks/useVoiceRecorder';
 import { X, RefreshCw } from 'lucide-react';
 
 const WEBHOOK_TIMEOUT = 65000; // 65 seconds
-const WEBHOOK_URL = 'https://mcexin.app.n8n.cloud/webhook/d7693e2e-ff5c-4dce-8dac-073415ac7f42';
+const WEBHOOK_URL = 'https://michelangelo.app.n8n.cloud/webhook-test/d7693e2e-ff5c-4dce-8dac-073415ac7f42';
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second
 
