@@ -29,21 +29,14 @@
     .table-group h4 {
       text-align: center;
       font-weight: bold;
-      color: #005500;
-    }
-    .highlight-cell {
-      border: 2px solid red !important; 
-    }
-    .update-icon {
-      margin-left: 4px;
-      font-size: 1.2rem;
+      color: #005500; 
     }
     .divider {
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2rem;
-      color: #005500;
+      color: #005500; 
       font-weight: bold;
     }
     @media (max-width: 768px) {
@@ -60,47 +53,21 @@
 <body>
   <div class="container mt-4">
     <h1 class="text-center">Classificazione Reclutamento</h1>
-    <p class="text-center">"Ehi, ho notato il tuo profilo BLULCU92M20H501X.
- So che operi soprattutto nell'area di Milano e, dato che stai 
-attraversando un momento di cambiamento personale essendo 
-divorziato, pensavo potremmo chiacchierare di qualche nuova 
-opportunità nel settore. Che ne dici?"
-</p>
     
-    <!-- Dati JSON per Record Nuovo e Record Precedente -->
+    <!-- Dati JSON per Record Nuovo -->
     <script id="classificatoreResult" type="application/json">
       [
-         "BLULCU92M20H501X|[null]|[null]|[null]|[null]|[null]|[null]|[null]|Milano|[null]|[null]|[null]|[null]|[null]|[null]|[null]|Divorziato|[null]|[null]"
-      ]
-    </script>
-
-    <script id="cercaRecordResult" type="application/json">
-      [
-         "BLULCU92M20H501X||Maschio|50|||Analista IT|Azienda tech|Lombardia, con focus su Milano e provincia|10|Nessuno|25000000.00|15000000.00|60|Problem solving; Lavoro di squadra|Crescere in un ruolo con più responsabilità; Coordinare un team; Avere un impatto più ampio sulle strategie aziendali|Sposato con due figli di 8 e 10 anni|Calcio; Tecnologia; AI; Automazione|"
+         "FCC 5403|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]"
       ]
     </script>
     
-    <!-- Dati JSON per il Record Aggiornato (terza tabella) -->
+    <!-- Dati JSON per il Record Inserito -->
     <script id="updateResult" type="application/json">
-      [ "BLULCU92M20H501X||Maschio|50|||Analista IT|Azienda tech|Lombardia, con focus su Milano e provincia|10|Nessuno|25000000.00|15000000.00|60|Problem solving; Lavoro di squadra|Crescere in un ruolo con più responsabilità; Coordinare un team; Avere un impatto più ampio sulle strategie aziendali|Sposato con due figli di 8 e 10 anni|Calcio; Tecnologia; AI; Automazione|" ]
+      [ "FCC 5403||||||||||||||||||" ]
     </script>
 
     <div class="table-wrapper">
-      <!-- Record Precedente -->
-      <div class="table-group">
-        <h4>Record Precedente</h4>
-        <table class="table table-bordered" id="previous-record">
-          <thead>
-            <tr>
-              <th>Campo</th>
-              <th>Valore</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-
-      <!-- Nuovo Record -->
+      <!-- Record Nuovo -->
       <div class="table-group">
         <h4>Record Nuovo</h4>
         <table class="table table-bordered" id="new-record">
@@ -117,9 +84,9 @@ opportunità nel settore. Che ne dici?"
       <!-- Divider -->
       <div class="divider">⇨</div>
 
-      <!-- Valori Aggiornati -->
+      <!-- Record Inserito -->
       <div class="table-group">
-        <h4>Record Aggiornato</h4>
+        <h4>Record Inserito</h4>
         <table class="table table-bordered" id="updated-values">
           <thead>
             <tr>
@@ -181,18 +148,12 @@ opportunità nel settore. Che ne dici?"
     };
 
     // Recupero dei dati JSON
-    let classificatoreResult, cercaRecordResult, updateResult;
+    let classificatoreResult, updateResult;
     try {
       classificatoreResult = JSON.parse(document.getElementById('classificatoreResult').textContent);
     } catch (e) {
       console.error("Errore nel parsing di classificatoreResult:", e);
       classificatoreResult = [];
-    }
-    try {
-      cercaRecordResult = JSON.parse(document.getElementById('cercaRecordResult').textContent);
-    } catch (e) {
-      console.error("Errore nel parsing di cercaRecordResult:", e);
-      cercaRecordResult = [];
     }
     try {
       updateResult = JSON.parse(document.getElementById('updateResult').textContent);
@@ -220,13 +181,13 @@ opportunità nel settore. Che ne dici?"
     }
 
     // Elaborazione dei record
-    const previousData = processRecord(cercaRecordResult);
     const newData = processRecord(classificatoreResult);
     const updatedData = processRecord(updateResult);
 
     // Popola una tabella con i dati di un record (due colonne: Campo e Valore)
-    // Se compareData viene passato (per "Valori Aggiornati"), evidenzia la cella con bordo rosso e aggiunge l'icona 🔄
-    // se il valore nel Record Precedente è vuoto o "N/A" e il valore nel Record Aggiornato non è vuoto né "N/A".
+    // Se compareData viene passato (per "Record Aggiornato"), confronta i dati del Record Nuovo (compareData)
+    // e se il valore nel Record Nuovo è vuoto o "N/A" mentre nel Record Aggiornato non lo è, 
+    // lascia la cella così com'è (senza evidenziazione con bordo o icona).
     function populateTable(tableId, record, highlightChanges = false, compareData = null) {
       const tableBody = document.getElementById(tableId).querySelector("tbody");
       tableBody.innerHTML = "";
@@ -241,14 +202,15 @@ opportunità nel settore. Che ne dici?"
         const valueCell = document.createElement("td");
         valueCell.textContent = record[key] || "N/A";
 
+        // Confronto: se il valore nel Record Nuovo è vuoto o "N/A" e nel Record Aggiornato non lo è,
+        // puoi aggiungere qui eventualmente un'altra forma di evidenziazione se desideri.
+        // (Attualmente non viene applicata alcuna evidenziazione extra.)
         if (highlightChanges && compareData) {
-          let prevVal = (compareData[key] || "").trim().toUpperCase();
+          let baseVal = (compareData[key] || "").trim().toUpperCase();
           let currVal = (record[key] || "").trim().toUpperCase();
-          if ((prevVal === "" || prevVal === "N/A") && (currVal !== "" && currVal !== "N/A")) {
-            // Aggiunge un bordo rosso alla cella e l'icona 🔄 accanto al valore
-            valueCell.classList.add("highlight-cell");
-            valueCell.innerHTML += ' <span class="update-icon">🔄</span>';
-          }
+          // La condizione è controllata ma non vengono applicati stili extra
+          // Puoi aggiungere qui la logica di evidenziazione se preferisci
+          console.log(key, baseVal, currVal);
         }
 
         row.appendChild(fieldCell);
@@ -258,11 +220,11 @@ opportunità nel settore. Che ne dici?"
     }
 
     // Popoliamo le tabelle:
-    populateTable("previous-record", previousData);
+    // - "Record Nuovo" con newData
+    // - "Record Aggiornato" con updatedData, confrontando i dati con newData
     populateTable("new-record", newData);
-    populateTable("updated-values", updatedData, true, previousData);
+    populateTable("updated-values", updatedData, true, newData);
 
-    console.log("Previous Data:", previousData);
     console.log("New Data:", newData);
     console.log("Updated Data:", updatedData);
   </script>
