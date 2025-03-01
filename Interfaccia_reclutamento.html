@@ -29,14 +29,21 @@
     .table-group h4 {
       text-align: center;
       font-weight: bold;
-      color: #005500; 
+      color: #005500;
+    }
+    .highlight-cell {
+      border: 2px solid red !important; 
+    }
+    .update-icon {
+      margin-left: 4px;
+      font-size: 1.2rem;
     }
     .divider {
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2rem;
-      color: #005500; 
+      color: #005500;
       font-weight: bold;
     }
     @media (max-width: 768px) {
@@ -53,22 +60,41 @@
 <body>
   <div class="container mt-4">
     <h1 class="text-center">Classificazione Reclutamento</h1>
-    <p class="text-center">Ehi, ciao… stavo a dare un'occhiata al tuo pr__filo (CF: ABCXYZ91A10H501D) e, se non sbag..., lavori nell'area di Napol', giusto? Eh, so' che sei divorziat_ e, beh, magari stai cercando di rimetterti in gioco, no? Co' la tua esperi___enza da consulente finanziario, potremmo scambiare qualche... idea, roba interessante. Che dici, ci becchiamo per un caffè e ne parlamo? Fammi sape’... dai.</p>
     
-    <!-- Dati JSON per Record Nuovo -->
+    <!-- Dati JSON per Record Nuovo e Record Precedente -->
     <script id="classificatoreResult" type="application/json">
       [
-         "ABCXYZ91A10H501D|[null]|[null]|[null]|[null]|[null]|Consulente finanziario|[null]|Napoli|[null]|[null]|[null]|[null]|[null]|[null]|[null]|Divorziato|[null]|[null]"
+         "BLULCU92M20H501X|[null]|[null]|50|[null]|[null]|Consulente Finanziario|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]|[null]"
+      ]
+    </script>
+
+    <script id="cercaRecordResult" type="application/json">
+      [
+         "BLULCU92M20H501X||Maschio||||Analista IT|Azienda tech|Lombardia, con focus su Milano e provincia|10|Nessuno|25000000.00|15000000.00|60|Problem solving; Lavoro di squadra|Crescere in un ruolo con più responsabilità; Coordinare un team; Avere un impatto più ampio sulle strategie aziendali|Sposato con due figli di 8 e 10 anni|Calcio; Tecnologia; AI; Automazione|"
       ]
     </script>
     
-    <!-- Dati JSON per il Record Inserito -->
+    <!-- Dati JSON per il Record Aggiornato (terza tabella) -->
     <script id="updateResult" type="application/json">
-      [ "ABCXYZ91A10H501D||||||Consulente finanziario||Napoli||||||||Divorziato||" ]
+      [ "BLULCU92M20H501X||Maschio|50|||Analista IT|Azienda tech|Lombardia, con focus su Milano e provincia|10|Nessuno|25000000.00|15000000.00|60|Problem solving; Lavoro di squadra|Crescere in un ruolo con più responsabilità; Coordinare un team; Avere un impatto più ampio sulle strategie aziendali|Sposato con due figli di 8 e 10 anni|Calcio; Tecnologia; AI; Automazione|" ]
     </script>
 
     <div class="table-wrapper">
-      <!-- Record Nuovo -->
+      <!-- Record Precedente -->
+      <div class="table-group">
+        <h4>Record Precedente</h4>
+        <table class="table table-bordered" id="previous-record">
+          <thead>
+            <tr>
+              <th>Campo</th>
+              <th>Valore</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Nuovo Record -->
       <div class="table-group">
         <h4>Record Nuovo</h4>
         <table class="table table-bordered" id="new-record">
@@ -85,9 +111,9 @@
       <!-- Divider -->
       <div class="divider">⇨</div>
 
-      <!-- Record Inserito -->
+      <!-- Valori Aggiornati -->
       <div class="table-group">
-        <h4>Record Inserito</h4>
+        <h4>Record Aggiornato</h4>
         <table class="table table-bordered" id="updated-values">
           <thead>
             <tr>
@@ -149,12 +175,18 @@
     };
 
     // Recupero dei dati JSON
-    let classificatoreResult, updateResult;
+    let classificatoreResult, cercaRecordResult, updateResult;
     try {
       classificatoreResult = JSON.parse(document.getElementById('classificatoreResult').textContent);
     } catch (e) {
       console.error("Errore nel parsing di classificatoreResult:", e);
       classificatoreResult = [];
+    }
+    try {
+      cercaRecordResult = JSON.parse(document.getElementById('cercaRecordResult').textContent);
+    } catch (e) {
+      console.error("Errore nel parsing di cercaRecordResult:", e);
+      cercaRecordResult = [];
     }
     try {
       updateResult = JSON.parse(document.getElementById('updateResult').textContent);
@@ -182,13 +214,13 @@
     }
 
     // Elaborazione dei record
+    const previousData = processRecord(cercaRecordResult);
     const newData = processRecord(classificatoreResult);
     const updatedData = processRecord(updateResult);
 
     // Popola una tabella con i dati di un record (due colonne: Campo e Valore)
-    // Se compareData viene passato (per "Record Aggiornato"), confronta i dati del Record Nuovo (compareData)
-    // e se il valore nel Record Nuovo è vuoto o "N/A" mentre nel Record Aggiornato non lo è, 
-    // lascia la cella così com'è (senza evidenziazione con bordo o icona).
+    // Se viene passato compareData (per "Record Aggiornato"), evidenzia la cella con bordo rosso e aggiunge l'icona 🔄
+    // se il valore nel Record Precedente è diverso da quello del Record Aggiornato.
     function populateTable(tableId, record, highlightChanges = false, compareData = null) {
       const tableBody = document.getElementById(tableId).querySelector("tbody");
       tableBody.innerHTML = "";
@@ -203,15 +235,14 @@
         const valueCell = document.createElement("td");
         valueCell.textContent = record[key] || "N/A";
 
-        // Confronto: se il valore nel Record Nuovo è vuoto o "N/A" e nel Record Aggiornato non lo è,
-        // puoi aggiungere qui eventualmente un'altra forma di evidenziazione se desideri.
-        // (Attualmente non viene applicata alcuna evidenziazione extra.)
         if (highlightChanges && compareData) {
-          let baseVal = (compareData[key] || "").trim().toUpperCase();
+          let prevVal = (compareData[key] || "").trim().toUpperCase();
           let currVal = (record[key] || "").trim().toUpperCase();
-          // La condizione è controllata ma non vengono applicati stili extra
-          // Puoi aggiungere qui la logica di evidenziazione se preferisci
-          console.log(key, baseVal, currVal);
+          // Se il valore del Record Precedente è diverso da quello del Record Aggiornato
+          if (prevVal !== currVal) {
+            valueCell.classList.add("highlight-cell");
+            valueCell.innerHTML += ' <span class="update-icon">🔄</span>';
+          }
         }
 
         row.appendChild(fieldCell);
@@ -221,11 +252,11 @@
     }
 
     // Popoliamo le tabelle:
-    // - "Record Nuovo" con newData
-    // - "Record Aggiornato" con updatedData, confrontando i dati con newData
+    populateTable("previous-record", previousData);
     populateTable("new-record", newData);
-    populateTable("updated-values", updatedData, true, newData);
+    populateTable("updated-values", updatedData, true, previousData);
 
+    console.log("Previous Data:", previousData);
     console.log("New Data:", newData);
     console.log("Updated Data:", updatedData);
   </script>
