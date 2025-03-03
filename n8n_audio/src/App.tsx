@@ -4,7 +4,7 @@ import { StatusMessage } from './components/StatusMessage';
 import { useVoiceRecorder } from './hooks/useVoiceRecorder';
 import { X, RefreshCw } from 'lucide-react';
 
-const WEBHOOK_TIMEOUT = 65000; // 65 seconds
+const WEBHOOK_TIMEOUT = 85000; // 85 seconds
 const WEBHOOK_URL = 'https://michelangelo.app.n8n.cloud/webhook-test/a52b9ba3-f292-4aa3-89a6-42e813a2bcd6';
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second
