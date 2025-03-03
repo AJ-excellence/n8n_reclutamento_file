@@ -4,7 +4,7 @@ Questa repository contiene l'interfaccia per il reclutamento e la gestione dei f
 
 Link interfaccia schema: https://interfaccia-reclutamento.onrender.com
 
-Link interfaccia audio: https://n8n-audio-interface.onrender.com/
+Link interfaccia audio: https://n8n-audio-interface.onrender.com
 
 ## 📂 Contenuto della Repository
 - File html-javascript dell'interfaccia per il reclutamento
